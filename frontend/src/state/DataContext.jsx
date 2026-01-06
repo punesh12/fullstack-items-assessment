@@ -1,18 +1,17 @@
-import React, { createContext, useCallback, useContext, useState } from 'react';
+import React, { createContext, useContext } from 'react';
 
 const DataContext = createContext();
 
 export function DataProvider({ children }) {
-  const [items, setItems] = useState([]);
-
-  const fetchItems = useCallback(async () => {
-    const res = await fetch('http://localhost:4001/api/items?limit=500'); // Intentional bug: backend ignores limit
-    const json = await res.json();
-    setItems(json);
-  }, []);
+  // Context now mainly provides the API base URL
+  // Items are managed locally in components for better control
+  // Using relative URL since Vite proxy handles /api -> http://localhost:4001
+  const value = {
+    apiBaseUrl: '/api'
+  };
 
   return (
-    <DataContext.Provider value={{ items, fetchItems }}>
+    <DataContext.Provider value={value}>
       {children}
     </DataContext.Provider>
   );
